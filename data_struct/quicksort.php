@@ -1,5 +1,5 @@
 <?php
-function bSearch($arr)
+function quickSort($arr)
 {
 	$count = count($arr);
 	print_r($arr);
@@ -19,13 +19,12 @@ function bSearch($arr)
 		}
 	}
 	
-	sleep(1);
-	$minArr = bSearch($minArr);
-	$maxArr = bSearch($maxArr);
+	$minArr = quickSort($minArr);
+	$maxArr = quickSort($maxArr);
 	return array_merge($minArr,[$tmpMiddleVal],$maxArr);
 }
 
 
 $arr = [2,56,7,89,90,7,54,23,2,4,5,6,7,8,5,4,3,3];
-$newArr = bSearch($arr);
+$newArr = quickSort($arr);
 print_r($newArr);
