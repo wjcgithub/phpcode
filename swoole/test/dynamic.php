@@ -36,7 +36,7 @@ class BaseProcess
         foreach ($this->process_list as $pid => $process){
             swoole_event_add($process->pipe, function ($pipe) use ($process){
                $data = $process->read();
-                var_dump($data);
+                echo '主进程输出' . $data . PHP_EOL;
                 $this->process_use[$process->pid] = 0;
             });
         }
@@ -50,21 +50,21 @@ class BaseProcess
                 if ($used==0){
                     $flag = false;
                     $this->process_use[$pid] = 1;
-                    $this->process_list[$pid]->write($index. " Hello");
+                    $this->process_list[$pid]->write($index. "Hello");
                     break;
                 }
             }
 
             //如果没有可用进程处理请求，并且还没有达到最大进程数那么就创建新的进程
-            if (!$flag && $this->current_worker_num < $this->max_worker_num){
+            if ($flag && $this->current_worker_num < $this->max_worker_num){
                 $process = new swoole_process([$this, 'task_run'], false, 2);
                 $pid = $process->start();
                 $this->process_list[$pid] = $process;
                 $this->process_use[$pid] = 1;
-                $this->process_list[$pid]->write($index . " Hello");
+                $this->process_list[$pid]->write($index . "Hello");
                 $this->current_worker_num++;
             }
-            var_dump($index);
+            echo $index.PHP_EOL;
             if ($index == 10) {
                 //退出所有的子进程
                 foreach ($this->process_list as $process) {
@@ -78,15 +78,15 @@ class BaseProcess
 
     public function task_run($worker)
     {
-        swoole_event_add($worker->pipe, function ($pipe) use ($worker){
+        swoole_event_add($worker->pipe, function () use ($worker){
             $data = $worker->read();
-            var_dump($worker->pid.":".$data);
+            print('工作进程输出' . $worker->pid.":".$data.PHP_EOL);
             if ($data == 'exit') {
                 $worker->exit();
                 exit;
             }
             sleep(5);
-            $worker->write(" ". $worker->pid);
+            $worker->write($worker->pid);
         });
     }
 }
