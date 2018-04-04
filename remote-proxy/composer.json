@@ -1,0 +1,14 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "ocramius/proxy-manager": "^2.1",
+        "silex/silex": "^2.2",
+        "doctrine/annotations": "^1.6"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    }
+}
