@@ -118,5 +118,26 @@ class Bst {
         }
     }
 
-    public function
+    public function __preOrder(Node $node)
+    {
+        if ($node != null) {
+            echo "key: $node->key  value: $node->value";
+            $this->__preOrder($node->left);
+            $this->__preOrder($node->right);
+        }
+    }
+
+    public function __middleOrder(Node $node)
+    {
+        if ($node != null) {
+            $this->__middleOrder($node->left);
+            echo "key: $node->key  value: $node->value";
+            $this->__middleOrder($node->right);
+        }
+    }
+
+    public function __afterOrder(Node $node)
+    {
+
+    }
 }
