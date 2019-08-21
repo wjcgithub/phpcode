@@ -1,8 +1,8 @@
 <?php
 
 Class Node {
-    private $key;
-    private $value;
+    public $key;
+    public $value;
     public $left;
     public $right;
 

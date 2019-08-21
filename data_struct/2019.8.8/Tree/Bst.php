@@ -15,7 +15,7 @@ class Bst {
 
     public function size()
     {
-        return count($this->count);
+        return $this->count;
     }
 
     public function isEmpty()
@@ -40,17 +40,22 @@ class Bst {
 
     public function preOrder()
     {
-
+        $this->__preOrder($this->root);
     }
 
     public function middleOrder()
     {
-
+        $this->__middleOrder($this->root);
     }
 
     public function afterOrder()
     {
+        $this->__afterOrder($this->root);
+    }
 
+    public function levelOrder()
+    {
+        $this->__levelOrder($this->root);
     }
 
     /**
@@ -63,7 +68,7 @@ class Bst {
      * @param $key
      * @param $value
      */
-    public function __insert(Node &$node, $key, $value)
+    public function __insert(Node &$node=null, $key, $value)
     {
         //递归退出条件
         if ($node == null) {
@@ -85,16 +90,16 @@ class Bst {
      * @param $key
      * @return bool
      */
-    public function __contain(Node $node, $key)
+    public function __contain(Node $node = null, $key)
     {
         if ($node == null) {
             return false;
         } else if ($node->key == $key) {
             return true;
         } else if ($node->key > $key) {
-            $this->__contain($node->left, $key);
+            return $this->__contain($node->left, $key);
         } else {
-            $this->__contain($node->right, $key);
+            return $this->__contain($node->right, $key);
         }
     }
 
@@ -105,39 +110,66 @@ class Bst {
      * @param $key
      * @return Node|null
      */
-    public function __search(Node $node, $key)
+    public function __search(Node $node = null, $key)
     {
         if ($node == null) {
             return null;
         } else if ($node->key == $key) {
             return $node;
         } else if ($node->key > $key) {
-            $this->__search($node->left, $key);
+            return $this->__search($node->left, $key);
         } else {
-            $this->__search($node->right, $key);
+            return $this->__search($node->right, $key);
         }
     }
 
-    public function __preOrder(Node $node)
+    public function __preOrder(Node $node = null)
     {
         if ($node != null) {
-            echo "key: $node->key  value: $node->value";
+            echo "key: $node->key  value: $node->value". PHP_EOL;
             $this->__preOrder($node->left);
             $this->__preOrder($node->right);
         }
     }
 
-    public function __middleOrder(Node $node)
+    public function __middleOrder(Node $node = null)
     {
         if ($node != null) {
             $this->__middleOrder($node->left);
-            echo "key: $node->key  value: $node->value";
+            echo "key: $node->key  value: $node->value". PHP_EOL;
             $this->__middleOrder($node->right);
         }
     }
 
-    public function __afterOrder(Node $node)
+    public function __afterOrder(Node $node = null)
     {
+        if ($node != null) {
+            $this->__afterOrder($node->left);
+            $this->__afterOrder($node->right);
+            echo "key: $node->key  value: $node->value". PHP_EOL;
+        }
+    }
 
+    public function __levelOrder(Node $node = null)
+    {
+        $queue = new SplQueue();
+        if ($node == null) return;
+
+        $queue->enqueue($node);
+        while ($theNode = $queue->shift()) {
+            echo "node $theNode->value , ";
+            if (!empty($theNode->left)){
+                $queue->enqueue($theNode->left);
+            }
+
+            if(!empty($theNode->right)) {
+                $queue->enqueue($theNode->right);
+            }
+
+            if ($queue->isEmpty()) {
+                break;
+            }
+        }
     }
 }
+
